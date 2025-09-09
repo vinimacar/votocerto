@@ -1,12 +1,16 @@
 {
+  "$schema": "https://openapi.vercel.sh/vercel.json",
   "version": 2,
-  "name": "votecerto",
-  "builds": [
-    {
-      "src": "public/**/*",
-      "use": "@vercel/static"
+  "name": "votocertopro-mcgm",
+  "env": {
+    "MY_KEY": "this is the value",
+    "SECRET": "@my-secret-name"
+  },
+  "functions": {
+    "public/**/*.html": {
+      "memory": 128
     }
-  ],
+  },
   "routes": [
     {
       "src": "/",
@@ -34,15 +38,15 @@
     },
     {
       "src": "/css/(.*)",
-      "dest": "/css/$1"
+      "dest": "/public/css/$1"
     },
     {
       "src": "/js/(.*)",
-      "dest": "/js/$1"
+      "dest": "/public/js/$1"
     },
     {
       "src": "/assets/(.*)",
-      "dest": "/assets/$1"
+      "dest": "/public/assets/$1"
     },
     {
       "src": "/(.*)",
@@ -87,13 +91,14 @@
       ]
     }
   ],
-  "functions": {
-    "public/**/*.html": {
-      "maxDuration": 10
-    }
-  },
   "regions": ["gru1"],
   "github": {
-    "silent": true
+    "silent": true,
+    "autoJobCancelation": false
+  },
+  "git": {
+    "deploymentEnabled": {
+      "main": true
+    }
   }
 }
