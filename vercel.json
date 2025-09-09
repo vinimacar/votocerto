@@ -11,46 +11,46 @@
       "memory": 128
     }
   },
-  "routes": [
+  "rewrites": [
     {
-      "src": "/",
-      "dest": "/public/index.html"
+      "source": "/",
+      "destination": "/public/index.html"
     },
     {
-      "src": "/login",
-      "dest": "/public/login.html"
+      "source": "/login",
+      "destination": "/public/login.html"
     },
     {
-      "src": "/urna",
-      "dest": "/public/urna.html"
+      "source": "/urna",
+      "destination": "/public/urna.html"
     },
     {
-      "src": "/dashboard",
-      "dest": "/public/dashboard.html"
+      "source": "/dashboard",
+      "destination": "/public/dashboard.html"
     },
     {
-      "src": "/resultados",
-      "dest": "/public/resultados.html"
+      "source": "/resultados",
+      "destination": "/public/resultados.html"
     },
     {
-      "src": "/relatorios",
-      "dest": "/public/relatorios.html"
+      "source": "/relatorios",
+      "destination": "/public/relatorios.html"
     },
     {
-      "src": "/css/(.*)",
-      "dest": "/public/css/$1"
+      "source": "/css/(.*)",
+      "destination": "/public/css/$1"
     },
     {
-      "src": "/js/(.*)",
-      "dest": "/public/js/$1"
+      "source": "/js/(.*)",
+      "destination": "/public/js/$1"
     },
     {
-      "src": "/assets/(.*)",
-      "dest": "/public/assets/$1"
+      "source": "/assets/(.*)",
+      "destination": "/public/assets/$1"
     },
     {
-      "src": "/(.*)",
-      "dest": "/public/$1"
+      "source": "/(.*)",
+      "destination": "/public/$1"
     }
   ],
   "headers": [
