@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - VoteCerto</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="../css/style.css" rel="stylesheet">
+</head>
+<body>
+    <!-- Header -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark-custom">
+        <div class="container-fluid">
+            <a class="navbar-brand neon-text" href="#">
+                <i class="fas fa-tachometer-alt me-2"></i>
+                VoteCerto Dashboard
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item">
+                        <a class="nav-link active" href="#" data-section="overview">
+                            <i class="fas fa-home me-1"></i>
+                            Visão Geral
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#" data-section="elections">
+                            <i class="fas fa-vote-yea me-1"></i>
+                            Eleições
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#" data-section="candidates">
+                            <i class="fas fa-users me-1"></i>
+                            Candidatos
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#" data-section="voters">
+                            <i class="fas fa-user-friends me-1"></i>
+                            Eleitores
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="resultados.html">
+                            <i class="fas fa-chart-bar me-1"></i>
+                            Resultados
+                        </a>
+                    </li>
+                </ul>
+                <ul class="navbar-nav">
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
+                            <i class="fas fa-user me-1"></i>
+                            <span id="userName">Admin</span>
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-dark dropdown-menu-end">
+                            <li><a class="dropdown-item" href="#">
+                                <i class="fas fa-cog me-2"></i>
+                                Configurações
+                            </a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item logout-btn" href="#">
+                                <i class="fas fa-sign-out-alt me-2"></i>
+                                Sair
+                            </a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container-fluid py-4">
+        <!-- Overview Section -->
+        <div id="overviewSection" class="dashboard-section">
+            <div class="row mb-4">
+                <div class="col-12">
+                    <h2 class="neon-text mb-3">
+                        <i class="fas fa-chart-line me-2"></i>
+                        Visão Geral do Sistema
+                    </h2>
+                </div>
+            </div>
+
+            <!-- Stats Cards -->
+            <div class="row g-4 mb-4">
+                <div class="col-md-3">
+                    <div class="dashboard-card stat-card">
+                        <i class="fas fa-vote-yea text-primary mb-3" style="font-size: 2rem;"></i>
+                        <div class="stat-number" id="totalElections">0</div>
+                        <p class="text-muted mb-0">Total de Eleições</p>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="dashboard-card stat-card">
+                        <i class="fas fa-users text-success mb-3" style="font-size: 2rem;"></i>
+                        <div class="stat-number" id="totalCandidates">0</div>
+                        <p class="text-muted mb-0">Candidatos</p>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="dashboard-card stat-card">
+                        <i class="fas fa-user-friends text-info mb-3" style="font-size: 2rem;"></i>
+                        <div class="stat-number" id="totalVoters">0</div>
+                        <p class="text-muted mb-0">Eleitores</p>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="dashboard-card stat-card">
+                        <i class="fas fa-check-circle text-warning mb-3" style="font-size: 2rem;"></i>
+                        <div class="stat-number" id="totalVotes">0</div>
+                        <p class="text-muted mb-0">Votos Registrados</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Recent Activity -->
+            <div class="row">
+                <div class="col-lg-8">
+                    <div class="dashboard-card">
+                        <h5 class="neon-text mb-3">
+                            <i class="fas fa-clock me-2"></i>
+                            Atividades Recentes
+                        </h5>
+                        <div id="recentActivities">
+                            <!-- Activities will be loaded here -->
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4">
+                    <div class="dashboard-card">
+                        <h5 class="neon-text mb-3">
+                            <i class="fas fa-bolt me-2"></i>
+                            Ações Rápidas
+                        </h5>
+                        <div class="d-grid gap-2">
+                            <button class="btn neon-btn" onclick="showCreateElectionModal()">
+                                <i class="fas fa-plus me-2"></i>
+                                Nova Eleição
+                            </button>
+                            <button class="btn btn-outline-primary" onclick="switchSection('candidates')">
+                                <i class="fas fa-user-plus me-2"></i>
+                                Adicionar Candidato
+                            </button>
+                            <button class="btn btn-outline-success" onclick="switchSection('voters')">
+                                <i class="fas fa-users me-2"></i>
+                                Gerenciar Eleitores
+                            </button>
+                            <a href="resultados.html" class="btn btn-outline-info">
+                                <i class="fas fa-chart-bar me-2"></i>
+                                Ver Resultados
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Elections Section -->
+        <div id="electionsSection" class="dashboard-section d-none">
+            <div class="row mb-4">
+                <div class="col-md-8">
+                    <h2 class="neon-text mb-3">
+                        <i class="fas fa-vote-yea me-2"></i>
+                        Gerenciar Eleições
+                    </h2>
+                </div>
+                <div class="col-md-4 text-end">
+                    <button class="btn neon-btn" onclick="showCreateElectionModal()">
+                        <i class="fas fa-plus me-2"></i>
+                        Nova Eleição
+                    </button>
+                </div>
+            </div>
+
+            <div class="dashboard-card">
+                <div class="table-responsive">
+                    <table class="table table-dark table-hover">
+                        <thead>
+                            <tr>
+                                <th>Título</th>
+                                <th>Tipo</th>
+                                <th>Status</th>
+                                <th>Data Início</th>
+                                <th>Data Fim</th>
+                                <th>Ações</th>
+                            </tr>
+                        </thead>
+                        <tbody id="electionsTable">
+                            <!-- Elections will be loaded here -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- Candidates Section -->
+        <div id="candidatesSection" class="dashboard-section d-none">
+            <div class="row mb-4">
+                <div class="col-md-8">
+                    <h2 class="neon-text mb-3">
+                        <i class="fas fa-users me-2"></i>
+                        Gerenciar Candidatos
+                    </h2>
+                </div>
+                <div class="col-md-4 text-end">
+                    <button class="btn neon-btn" onclick="showCreateCandidateModal()">
+                        <i class="fas fa-user-plus me-2"></i>
+                        Novo Candidato
+                    </button>
+                </div>
+            </div>
+
+            <div class="row" id="candidatesGrid">
+                <!-- Candidates will be loaded here -->
+            </div>
+        </div>
+
+        <!-- Voters Section -->
+        <div id="votersSection" class="dashboard-section d-none">
+            <div class="row mb-4">
+                <div class="col-md-8">
+                    <h2 class="neon-text mb-3">
+                        <i class="fas fa-user-friends me-2"></i>
+                        Gerenciar Eleitores
+                    </h2>
+                </div>
+                <div class="col-md-4 text-end">
+                    <button class="btn neon-btn" onclick="showCreateVoterModal()">
+                        <i class="fas fa-user-plus me-2"></i>
+                        Novo Eleitor
+                    </button>
+                </div>
+            </div>
+
+            <div class="dashboard-card">
+                <div class="table-responsive">
+                    <table class="table table-dark table-hover">
+                        <thead>
+                            <tr>
+                                <th>Nome</th>
+                                <th>E-mail</th>
+                                <th>Matrícula/CPF</th>
+                                <th>Status</th>
+                                <th>Último Login</th>
+                                <th>Ações</th>
+                            </tr>
+                        </thead>
+                        <tbody id="votersTable">
+                            <!-- Voters will be loaded here -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Create Election Modal -->
+    <div class="modal fade" id="createElectionModal" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content bg-dark-custom border-neon">
+                <div class="modal-header border-bottom border-secondary">
+                    <h5 class="modal-title neon-text">
+                        <i class="fas fa-plus me-2"></i>
+                        Nova Eleição
+                    </h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="createElectionForm">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="electionTitle" class="form-label">Título da Eleição</label>
+                                    <input type="text" class="form-control" id="electionTitle" required>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="electionType" class="form-label">Tipo</label>
+                                    <select class="form-control" id="electionType" required>
+                                        <option value="">Selecione o tipo</option>
+                                        <option value="cipa">CIPA</option>
+                                        <option value="school">Escolar</option>
+                                        <option value="condominium">Condomínio</option>
+                                        <option value="guild">Grêmio</option>
+                                        <option value="association">Associação</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="electionDescription" class="form-label">Descrição</label>
+                            <textarea class="form-control" id="electionDescription" rows="3"></textarea>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="startDate" class="form-label">Data de Início</label>
+                                    <input type="datetime-local" class="form-control" id="startDate" required>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="endDate" class="form-label">Data de Fim</label>
+                                    <input type="datetime-local" class="form-control" id="endDate" required>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer border-top border-secondary">
+                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="button" class="btn neon-btn" onclick="createElection()">Criar Eleição</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Loading Overlay -->
+    <div id="loadingOverlay" class="position-fixed top-0 start-0 w-100 h-100 d-none" style="background: rgba(0,0,0,0.8); z-index: 9999;">
+        <div class="d-flex justify-content-center align-items-center h-100">
+            <div class="text-center">
+                <div class="loading-spinner mb-3"></div>
+                <p class="text-light">Carregando...</p>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script type="module" src="../js/firebase-config.js"></script>
+    <script type="module" src="../js/auth.js"></script>
+    <script type="module" src="../js/admin.js"></script>
+
+    <script>
+        // Navigation between sections
+        function switchSection(sectionName) {
+            // Hide all sections
+            document.querySelectorAll('.dashboard-section').forEach(section => {
+                section.classList.add('d-none');
+            });
+            
+            // Show selected section
+            document.getElementById(sectionName + 'Section').classList.remove('d-none');
+            
+            // Update nav links
+            document.querySelectorAll('.nav-link').forEach(link => {
+                link.classList.remove('active');
+            });
+            
+            document.querySelector(`[data-section="${sectionName}"]`).classList.add('active');
+        }
+
+        // Setup navigation event listeners
+        document.addEventListener('DOMContentLoaded', function() {
+            document.querySelectorAll('[data-section]').forEach(link => {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const section = this.dataset.section;
+                    switchSection(section);
+                });
+            });
+        });
+
+        // Modal functions (will be implemented in admin.js)
+        function showCreateElectionModal() {
+            const modal = new bootstrap.Modal(document.getElementById('createElectionModal'));
+            modal.show();
+        }
+
+        function showCreateCandidateModal() {
+            // Will be implemented
+            console.log('Create candidate modal');
+        }
+
+        function showCreateVoterModal() {
+            // Will be implemented
+            console.log('Create voter modal');
+        }
+
+        function createElection() {
+            // Will be implemented in admin.js
+            console.log('Create election');
+        }
+    </script>
+</body>
+</html>

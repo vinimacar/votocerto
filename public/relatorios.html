@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Relatórios - VoteCerto</title>
+    
+    <!-- Bootstrap 5 -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark fixed-top">
+        <div class="container">
+            <a class="navbar-brand neon-text" href="index.html">
+                <i class="fas fa-vote-yea me-2"></i>
+                VoteCerto
+            </a>
+            
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="urna.html">
+                            <i class="fas fa-vote-yea me-1"></i>
+                            Votar
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="resultados.html">
+                            <i class="fas fa-chart-bar me-1"></i>
+                            Resultados
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="relatorios.html">
+                            <i class="fas fa-file-alt me-1"></i>
+                            Relatórios
+                        </a>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown">
+                            <i class="fas fa-user me-1"></i>
+                            <span id="userName">Usuário</span>
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-dark">
+                            <li><a class="dropdown-item" href="dashboard.html"><i class="fas fa-tachometer-alt me-2"></i>Dashboard</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item" href="#" onclick="logout()"><i class="fas fa-sign-out-alt me-2"></i>Sair</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="container-fluid mt-5 pt-4">
+        <!-- Page Header -->
+        <div class="row mb-4">
+            <div class="col-12">
+                <div class="dashboard-card text-center">
+                    <h2 class="neon-text mb-3">
+                        <i class="fas fa-file-alt me-2"></i>
+                        Relatórios da Eleição
+                    </h2>
+                    <p class="text-muted">Gere e exporte relatórios detalhados sobre a eleição</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Election Selector -->
+        <div class="row mb-4">
+            <div class="col-12">
+                <div class="dashboard-card">
+                    <h4 class="neon-text mb-3">
+                        <i class="fas fa-filter me-2"></i>
+                        Selecionar Eleição
+                    </h4>
+                    <div class="row align-items-end">
+                        <div class="col-md-8">
+                            <label for="electionSelect" class="form-label">Eleição</label>
+                            <select class="form-select" id="electionSelect" onchange="loadElectionData()">
+                                <option value="">Carregando eleições...</option>
+                            </select>
+                        </div>
+                        <div class="col-md-4">
+                            <button class="btn neon-btn w-100" onclick="refreshElections()">
+                                <i class="fas fa-sync-alt me-2"></i>
+                                Atualizar
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Report Types -->
+        <div class="row mb-4">
+            <div class="col-lg-4 col-md-6 mb-4">
+                <div class="dashboard-card h-100">
+                    <div class="text-center">
+                        <div class="report-icon mb-3">
+                            <i class="fas fa-chart-pie text-primary"></i>
+                        </div>
+                        <h5 class="neon-text">Relatório Geral</h5>
+                        <p class="text-muted mb-4">Resumo completo da eleição com estatísticas gerais</p>
+                        <button class="btn neon-btn w-100" onclick="generateGeneralReport()">
+                            <i class="fas fa-download me-2"></i>
+                            Gerar Relatório
+                        </button>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-lg-4 col-md-6 mb-4">
+                <div class="dashboard-card h-100">
+                    <div class="text-center">
+                        <div class="report-icon mb-3">
+                            <i class="fas fa-users text-success"></i>
+                        </div>
+                        <h5 class="neon-text">Relatório de Participação</h5>
+                        <p class="text-muted mb-4">Lista de eleitores que votaram e não votaram</p>
+                        <button class="btn neon-btn w-100" onclick="generateParticipationReport()">
+                            <i class="fas fa-download me-2"></i>
+                            Gerar Relatório
+                        </button>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-lg-4 col-md-6 mb-4">
+                <div class="dashboard-card h-100">
+                    <div class="text-center">
+                        <div class="report-icon mb-3">
+                            <i class="fas fa-trophy text-warning"></i>
+                        </div>
+                        <h5 class="neon-text">Relatório de Candidatos</h5>
+                        <p class="text-muted mb-4">Desempenho detalhado de cada candidato</p>
+                        <button class="btn neon-btn w-100" onclick="generateCandidatesReport()">
+                            <i class="fas fa-download me-2"></i>
+                            Gerar Relatório
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Export Options -->
+        <div class="row mb-4">
+            <div class="col-12">
+                <div class="dashboard-card">
+                    <h4 class="neon-text mb-3">
+                        <i class="fas fa-file-export me-2"></i>
+                        Opções de Exportação
+                    </h4>
+                    <div class="row">
+                        <div class="col-md-3 col-sm-6 mb-3">
+                            <div class="export-option" onclick="setExportFormat('pdf')">
+                                <i class="fas fa-file-pdf text-danger"></i>
+                                <span>PDF</span>
+                                <input type="radio" name="exportFormat" value="pdf" checked>
+                            </div>
+                        </div>
+                        <div class="col-md-3 col-sm-6 mb-3">
+                            <div class="export-option" onclick="setExportFormat('excel')">
+                                <i class="fas fa-file-excel text-success"></i>
+                                <span>Excel</span>
+                                <input type="radio" name="exportFormat" value="excel">
+                            </div>
+                        </div>
+                        <div class="col-md-3 col-sm-6 mb-3">
+                            <div class="export-option" onclick="setExportFormat('csv')">
+                                <i class="fas fa-file-csv text-info"></i>
+                                <span>CSV</span>
+                                <input type="radio" name="exportFormat" value="csv">
+                            </div>
+                        </div>
+                        <div class="col-md-3 col-sm-6 mb-3">
+                            <div class="export-option" onclick="setExportFormat('json')">
+                                <i class="fas fa-file-code text-warning"></i>
+                                <span>JSON</span>
+                                <input type="radio" name="exportFormat" value="json">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Report Preview -->
+        <div class="row mb-4" id="reportPreviewSection" style="display: none;">
+            <div class="col-12">
+                <div class="dashboard-card">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <h4 class="neon-text mb-0">
+                            <i class="fas fa-eye me-2"></i>
+                            Pré-visualização do Relatório
+                        </h4>
+                        <div class="btn-group">
+                            <button class="btn btn-outline-primary" onclick="printReport()">
+                                <i class="fas fa-print me-2"></i>
+                                Imprimir
+                            </button>
+                            <button class="btn neon-btn" onclick="downloadReport()">
+                                <i class="fas fa-download me-2"></i>
+                                Baixar
+                            </button>
+                        </div>
+                    </div>
+                    <div id="reportPreview" class="report-preview">
+                        <!-- Report content will be loaded here -->
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Statistics Summary -->
+        <div class="row mb-4">
+            <div class="col-12">
+                <div class="dashboard-card">
+                    <h4 class="neon-text mb-3">
+                        <i class="fas fa-chart-line me-2"></i>
+                        Resumo Estatístico
+                    </h4>
+                    <div class="row" id="statisticsSummary">
+                        <div class="col-md-3 col-sm-6 mb-3">
+                            <div class="stat-card">
+                                <div class="stat-icon">
+                                    <i class="fas fa-users text-primary"></i>
+                                </div>
+                                <div class="stat-info">
+                                    <h3 class="neon-text" id="totalVotersCount">0</h3>
+                                    <p class="text-muted">Total de Eleitores</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3 col-sm-6 mb-3">
+                            <div class="stat-card">
+                                <div class="stat-icon">
+                                    <i class="fas fa-vote-yea text-success"></i>
+                                </div>
+                                <div class="stat-info">
+                                    <h3 class="neon-text" id="totalVotesCount">0</h3>
+                                    <p class="text-muted">Votos Computados</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3 col-sm-6 mb-3">
+                            <div class="stat-card">
+                                <div class="stat-icon">
+                                    <i class="fas fa-percentage text-warning"></i>
+                                </div>
+                                <div class="stat-info">
+                                    <h3 class="neon-text" id="participationRate">0%</h3>
+                                    <p class="text-muted">Taxa de Participação</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3 col-sm-6 mb-3">
+                            <div class="stat-card">
+                                <div class="stat-icon">
+                                    <i class="fas fa-user-check text-info"></i>
+                                </div>
+                                <div class="stat-info">
+                                    <h3 class="neon-text" id="candidatesCount">0</h3>
+                                    <p class="text-muted">Candidatos</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Recent Reports -->
+        <div class="row mb-4">
+            <div class="col-12">
+                <div class="dashboard-card">
+                    <h4 class="neon-text mb-3">
+                        <i class="fas fa-history me-2"></i>
+                        Relatórios Recentes
+                    </h4>
+                    <div class="table-responsive">
+                        <table class="table table-dark table-hover">
+                            <thead>
+                                <tr>
+                                    <th>Relatório</th>
+                                    <th>Eleição</th>
+                                    <th>Formato</th>
+                                    <th>Data de Geração</th>
+                                    <th>Ações</th>
+                                </tr>
+                            </thead>
+                            <tbody id="recentReportsTable">
+                                <tr>
+                                    <td colspan="5" class="text-center text-muted py-4">
+                                        <i class="fas fa-file-alt fa-2x mb-2"></i><br>
+                                        Nenhum relatório gerado ainda
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Loading Overlay -->
+    <div id="loadingOverlay" class="loading-overlay" style="display: none;">
+        <div class="loading-content">
+            <div class="spinner-border text-primary" role="status">
+                <span class="visually-hidden">Carregando...</span>
+            </div>
+            <p class="mt-3">Gerando relatório...</p>
+        </div>
+    </div>
+
+    <!-- Alert Container -->
+    <div id="alertContainer" class="position-fixed top-0 end-0 p-3" style="z-index: 1050;"></div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <!-- Firebase -->
+    <script type="module" src="../js/firebase-config.js"></script>
+    <script type="module" src="../js/auth.js"></script>
+    <script type="module" src="../js/relatorios.js"></script>
+
+    <style>
+        .report-icon {
+            font-size: 3rem;
+        }
+        
+        .export-option {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 1.5rem;
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+        
+        .export-option:hover {
+            border-color: var(--neon-blue);
+            background: rgba(0, 255, 255, 0.1);
+        }
+        
+        .export-option.active {
+            border-color: var(--neon-blue);
+            background: rgba(0, 255, 255, 0.2);
+        }
+        
+        .export-option i {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .export-option input[type="radio"] {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+        }
+        
+        .stat-card {
+            display: flex;
+            align-items: center;
+            padding: 1rem;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+            border-left: 4px solid var(--neon-blue);
+        }
+        
+        .stat-icon {
+            font-size: 2rem;
+            margin-right: 1rem;
+        }
+        
+        .stat-info h3 {
+            margin: 0;
+            font-size: 1.5rem;
+        }
+        
+        .stat-info p {
+            margin: 0;
+            font-size: 0.9rem;
+        }
+        
+        .report-preview {
+            background: #fff;
+            color: #000;
+            padding: 2rem;
+            border-radius: 10px;
+            min-height: 400px;
+        }
+        
+        @media print {
+            .navbar,
+            .btn-group,
+            #reportPreviewSection .d-flex {
+                display: none !important;
+            }
+            
+            .report-preview {
+                background: #fff !important;
+                color: #000 !important;
+                box-shadow: none !important;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .export-option {
+                padding: 1rem;
+            }
+            
+            .export-option i {
+                font-size: 1.5rem;
+            }
+            
+            .stat-card {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            .stat-icon {
+                margin-right: 0;
+                margin-bottom: 0.5rem;
+            }
+        }
+    </style>
+</body>
+</html>
