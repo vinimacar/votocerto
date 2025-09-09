@@ -1,7 +1,7 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
   "version": 2,
-  "name": "votecerto",
+  "name": "votocertopro-mcgm",
   "env": {
     "MY_KEY": "this is the value",
     "SECRET": "@my-secret-name"
