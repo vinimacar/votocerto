@@ -6,6 +6,8 @@
     "MY_KEY": "this is the value",
     "SECRET": "@my-secret-name"
   },
+  "buildCommand": null,
+  "outputDirectory": "public",
   "routes": [
     {
       "src": "/",
