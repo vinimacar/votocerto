@@ -5,7 +5,8 @@ import {
     auth, 
     database, 
     userRoles, 
-    utils 
+    utils,
+    googleProvider 
 } from './firebase-config.js';
 
 import {
@@ -13,7 +14,8 @@ import {
     createUserWithEmailAndPassword,
     signOut,
     onAuthStateChanged,
-    sendPasswordResetEmail
+    sendPasswordResetEmail,
+    signInWithPopup
 } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js';
 
 import {
@@ -62,6 +64,12 @@ class AuthSystem {
                 this.logout();
             }
         });
+
+        // Setup Google login button
+        const googleLoginBtn = document.getElementById('googleLoginBtn');
+        if (googleLoginBtn) {
+            googleLoginBtn.addEventListener('click', () => this.handleGoogleLogin());
+        }
     }
 
     async handleLogin(e) {
@@ -157,6 +165,74 @@ class AuthSystem {
             
             if (error.code === 'auth/user-not-found') {
                 errorMessage = 'E-mail não encontrado!';
+            }
+            
+            utils.showAlert(errorMessage, 'danger');
+        } finally {
+            utils.hideLoading();
+        }
+    }
+
+    async handleGoogleLogin() {
+        utils.showLoading();
+
+        try {
+            // Sign in with Google popup
+            const result = await signInWithPopup(auth, googleProvider);
+            const user = result.user;
+            
+            // Check if user profile exists, if not create one
+            const userRef = ref(database, `users/${user.uid}`);
+            const snapshot = await get(userRef);
+            
+            if (!snapshot.exists()) {
+                // Create new user profile with Google data
+                const userProfile = {
+                    uid: user.uid,
+                    email: user.email,
+                    name: user.displayName || user.email.split('@')[0],
+                    role: userRoles.VOTER, // Default role
+                    photoURL: user.photoURL,
+                    provider: 'google',
+                    createdAt: new Date().toISOString(),
+                    lastLogin: new Date().toISOString(),
+                    isActive: true
+                };
+                
+                await set(userRef, userProfile);
+                utils.showAlert('Conta criada com sucesso via Google!', 'success');
+            } else {
+                // Update last login
+                await this.updateLastLogin();
+                utils.showAlert('Login realizado com sucesso!', 'success');
+            }
+            
+            // Log the login
+            await this.logActivity(user.uid, 'google_login', 'User logged in with Google');
+            
+            // Redirect based on user role
+            setTimeout(() => {
+                this.redirectBasedOnRole();
+            }, 1000);
+            
+        } catch (error) {
+            console.error('Google login error:', error);
+            
+            let errorMessage = 'Erro ao fazer login com Google.';
+            
+            switch (error.code) {
+                case 'auth/popup-closed-by-user':
+                    errorMessage = 'Login cancelado pelo usuário.';
+                    break;
+                case 'auth/popup-blocked':
+                    errorMessage = 'Popup bloqueado. Permita popups para este site.';
+                    break;
+                case 'auth/cancelled-popup-request':
+                    errorMessage = 'Solicitação de popup cancelada.';
+                    break;
+                case 'auth/network-request-failed':
+                    errorMessage = 'Erro de conexão. Verifique sua internet.';
+                    break;
             }
             
             utils.showAlert(errorMessage, 'danger');
