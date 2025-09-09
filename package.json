@@ -1,0 +1,65 @@
+{
+  "name": "votecerto",
+  "version": "1.0.0",
+  "description": "Sistema completo de eleições online para escolas, condomínios, CIPA, grêmios e associações",
+  "main": "public/index.html",
+  "scripts": {
+    "dev": "npx serve public -p 3000",
+    "start": "npx serve public -p 8080",
+    "build": "echo 'Build não necessário - projeto estático'",
+    "deploy": "vercel --prod",
+    "preview": "vercel",
+    "lint": "echo 'Linting JavaScript files...' && npx eslint js/*.js",
+    "format": "npx prettier --write .",
+    "serve": "npx http-server public -p 8080 -c-1",
+    "test": "echo 'Testes não configurados ainda'"
+  },
+  "keywords": [
+    "eleicao",
+    "votacao",
+    "online",
+    "firebase",
+    "javascript",
+    "bootstrap",
+    "responsive",
+    "dark-mode",
+    "neon",
+    "futuristic"
+  ],
+  "author": "VoteCerto Team",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/seu-usuario/votecerto.git"
+  },
+  "bugs": {
+    "url": "https://github.com/seu-usuario/votecerto/issues"
+  },
+  "homepage": "https://votecerto.vercel.app",
+  "devDependencies": {
+    "eslint": "^8.0.0",
+    "prettier": "^3.0.0",
+    "http-server": "^14.0.0",
+    "serve": "^14.0.0"
+  },
+  "dependencies": {},
+  "engines": {
+    "node": ">=16.0.0",
+    "npm": ">=8.0.0"
+  },
+  "browserslist": [
+    "> 1%",
+    "last 2 versions",
+    "not dead",
+    "not ie 11"
+  ],
+  "files": [
+    "public/**/*",
+    "css/**/*",
+    "js/**/*",
+    "assets/**/*",
+    "vercel.json",
+    "README.md",
+    "FIREBASE_SETUP.md"
+  ]
+}
